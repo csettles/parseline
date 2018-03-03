@@ -1,10 +1,10 @@
-//
-//  main.c
-//  asgn5
-//
-//  Created by Caitlin Settles on 3/3/18.
-//  Copyright © 2018 Caitlin Settles. All rights reserved.
-//
+/**
+  main.c
+  asgn5
+
+  Created by Caitlin Settles on 3/3/18.
+  Copyright © 2018 Caitlin Settles. All rights reserved.
+**/
 
 #include "parseline.h"
 
