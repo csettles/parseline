@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		84C4E605204B448A008D7191 /* parseline.c in Sources */ = {isa = PBXBuildFile; fileRef = 84C4E604204B448A008D7191 /* parseline.c */; };
+		84C4E60F204B5AEF008D7191 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 84C4E60C204B5AEF008D7191 /* Makefile */; };
+		84C4E610204B5AEF008D7191 /* checker.c in Sources */ = {isa = PBXBuildFile; fileRef = 84C4E60D204B5AEF008D7191 /* checker.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -26,6 +28,9 @@
 		84C4E601204B448A008D7191 /* asgn5 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = asgn5; sourceTree = BUILT_PRODUCTS_DIR; };
 		84C4E604204B448A008D7191 /* parseline.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = parseline.c; sourceTree = "<group>"; };
 		84C4E60B204B44FA008D7191 /* parseline.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = parseline.h; sourceTree = "<group>"; };
+		84C4E60C204B5AEF008D7191 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		84C4E60D204B5AEF008D7191 /* checker.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = checker.c; sourceTree = "<group>"; };
+		84C4E60E204B5AEF008D7191 /* checker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = checker.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +63,9 @@
 		84C4E603204B448A008D7191 /* asgn5 */ = {
 			isa = PBXGroup;
 			children = (
+				84C4E60D204B5AEF008D7191 /* checker.c */,
+				84C4E60E204B5AEF008D7191 /* checker.h */,
+				84C4E60C204B5AEF008D7191 /* Makefile */,
 				84C4E60B204B44FA008D7191 /* parseline.h */,
 				84C4E604204B448A008D7191 /* parseline.c */,
 			);
@@ -121,6 +129,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				84C4E610204B5AEF008D7191 /* checker.c in Sources */,
+				84C4E60F204B5AEF008D7191 /* Makefile in Sources */,
 				84C4E605204B448A008D7191 /* parseline.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
