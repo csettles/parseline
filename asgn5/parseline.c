@@ -1,20 +1,33 @@
-//
-//  main.c
-//  asgn5
-//
-//  Created by Caitlin Settles on 3/3/18.
-//  Copyright © 2018 Caitlin Settles. All rights reserved.
-//
+/**
+  main.c
+  asgn5
+
+  Created by Caitlin Settles on 3/3/18.
+  Copyright © 2018 Caitlin Settles. All rights reserved.
+**/
 
 #include "parseline.h"
 
 int main(int argc, const char * argv[]) {
-	char *stages[10], line[512];
+	int i, str_length; 
+	char *stages[10], line[PATH_SIZE + 1];
 	
-	sscanf(stdin, "%512s", line);
-	
+	for (i = 0; i < PATH_SIZE + 1; i++) {
+                line[i] = '\0';
+        }
+
+        printf("line: ");
+        fgets(line, PATH_SIZE + 1, stdin);
+        str_length = strlen(line);
+
+        if (str_length >= PATH_SIZE) {
+                fprintf(stderr, "parseline: command line length too long\n");
+        } else {
+                printf("%d\n", str_length);
+        }
+		
 	split_line(line, stages);
-	
+
 	return 0;
 }
 
