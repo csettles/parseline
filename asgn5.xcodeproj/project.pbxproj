@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		84C4E605204B448A008D7191 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 84C4E604204B448A008D7191 /* main.c */; };
+		84C4E605204B448A008D7191 /* parseline.c in Sources */ = {isa = PBXBuildFile; fileRef = 84C4E604204B448A008D7191 /* parseline.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -24,7 +24,8 @@
 
 /* Begin PBXFileReference section */
 		84C4E601204B448A008D7191 /* asgn5 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = asgn5; sourceTree = BUILT_PRODUCTS_DIR; };
-		84C4E604204B448A008D7191 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
+		84C4E604204B448A008D7191 /* parseline.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = parseline.c; sourceTree = "<group>"; };
+		84C4E60B204B44FA008D7191 /* parseline.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = parseline.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,7 +58,8 @@
 		84C4E603204B448A008D7191 /* asgn5 */ = {
 			isa = PBXGroup;
 			children = (
-				84C4E604204B448A008D7191 /* main.c */,
+				84C4E60B204B44FA008D7191 /* parseline.h */,
+				84C4E604204B448A008D7191 /* parseline.c */,
 			);
 			path = asgn5;
 			sourceTree = "<group>";
@@ -119,7 +121,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				84C4E605204B448A008D7191 /* main.c in Sources */,
+				84C4E605204B448A008D7191 /* parseline.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -233,6 +235,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				GCC_C_LANGUAGE_STANDARD = ansi;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -241,6 +244,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				GCC_C_LANGUAGE_STANDARD = ansi;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
