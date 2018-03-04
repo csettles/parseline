@@ -96,11 +96,24 @@ int handle_output(char *input, int stageno, int stage_max) {
 
 int handle_count( char *input, int stageno, int stage_max) {
 	char input_copy[LINE_MAX];
-	char *temp;
+	char *token;
+	int arg_counter;
 
 	strcpy(input_copy, input);
-	temp = strtok(input_copy, " ");
-	printf("%s\n", temp);
+		
+	token = strtok(input_copy, " ");
+		
+	arg_counter = 0;
+	while(token != NULL) {
+		if ((strcmp(token,"<") != 0) && (strcmp(token, ">") != 0)) {
+			arg_counter++; 
+		} else {
+			arg_counter--; 
+		}		
+		token = strtok(NULL, " ");
+	}
+	printf("%*s", 12, "argc: ");
+        printf("%d\n", arg_counter);
 	return 0;
 }
 	
