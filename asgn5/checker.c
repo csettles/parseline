@@ -5,6 +5,7 @@
 
 /** Will take in an input string **/
 int handle_stage(char *input, int stageno, int stage_max) {
+	int arg_count;
 	unsigned char last_index;
 	
 	last_index = strlen(input) - 1;
@@ -21,8 +22,8 @@ int handle_stage(char *input, int stageno, int stage_max) {
 	
         handle_input(input, stageno, stage_max);
         handle_output(input, stageno, stage_max);
-        handle_count(input, stageno, stage_max);
-	handle_args(input, stageno, stage_max);
+        arg_count = handle_count(input, stageno, stage_max);
+	handle_args(input, stageno, stage_max, arg_count);
         return 0;
 }
 
@@ -114,12 +115,41 @@ int handle_count( char *input, int stageno, int stage_max) {
 	}
 	printf("%*s", 12, "argc: ");
         printf("%d\n", arg_counter);
-	return 0;
+	return arg_counter;
 }
 	
 /** Will get the arg list and size**/
-int handle_args(char *input, int stageno, int stage_max) {
-       	 
+int handle_args(char *input, int stageno, int stage_max, int arg_count) {
+	int dir_flag, arg_counter;   
+	char input_copy[LINE_MAX];     
+	char *token;
+	
+	dir_flag = 0; 
+	strcpy(input_copy, input);
+	
+	printf("%*s", 12, "argv: ");
+        token = strtok(input_copy, " ");
+
+	arg_counter = 0;
+        while(token != NULL) {
+                if (dir_flag == 0 &&(strcmp(token,"<") != 0) && (strcmp(token, ">") != 0)) {
+                        if (arg_counter < arg_count-1) {
+				printf("\"%s\",", token);
+				arg_counter++; 
+			} else {
+				printf("\"%s\"", token); 
+			}
+                } else {
+                	if (dir_flag == 0) {
+				dir_flag = 1;	
+			} else {
+				dir_flag = 0; 
+			}
+		}
+		
+                token = strtok(NULL, " ");
+        }
+	printf("\n"); 
 	return 0;
 }
 
