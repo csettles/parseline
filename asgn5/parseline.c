@@ -66,10 +66,11 @@ void clean_line(char *line, char **stages, int len) {
 	char *temp;
 
 	/* Checks there are no empty stages */
+	
 	strcpy(line_copy, line);  
 	temp = strtok(line_copy, "|");
 	
-	/* TODO: Check that last pipe has a stage after it? */ 
+	/* TODO: If multiple spaces between things?? */ 
 	while(temp != NULL) {
 		if (strlen(temp) == 1) {
 			fprintf(stderr, "invalid null command\n"); 
@@ -82,10 +83,9 @@ void clean_line(char *line, char **stages, int len) {
 	 /* TODO: Handle missing names and get command failed on */
 	/* Checks there aren't more than one '<' or '>' in any stages*/
 	for (i = 0; i < len; i++) {
-		strcpy(line_copy, stages[i]); 
 		
-		/* Find first <, more past it, check if another exist */ 
-		temp = strchr(line_copy, '<'); 
+		/* Find first <, move past it, check if another exist */ 
+		temp = strchr(stages[i], '<'); 
 		if (temp != NULL) {
 			temp++; 
 			temp = strchr(temp, '<');
@@ -96,11 +96,10 @@ void clean_line(char *line, char **stages, int len) {
 			}
 		}
 	}
-	
-	for (i = 0; i < len; i++) {	
-		strcpy(line_copy, stages[i]); 
 
-		temp = strchr(line_copy, '>');
+	for (i = 0; i < len; i++) {	
+		/* Find first >, move past, check if another exists */
+		temp = strchr(stages[i], '>');
 		if (temp != NULL) {
 			temp++; 
 			temp = strchr(temp, '>');
@@ -116,10 +115,8 @@ void clean_line(char *line, char **stages, int len) {
 	/* Handle input, check everything after first */
 	if (len > 1) {
 		for (i = 1; i < len; i++) {
-			strcpy(line_copy, stages[i]); 
-			
 			/* Stages after 1 MUST have a pipe in, if also <, exit */
-			if ((temp = strchr(line_copy, '<')) != NULL) {
+			if ((temp = strchr(stages[i], '<')) != NULL) {
 				fprintf(stderr, "ambigious input\n");
 				exit(EXIT_FAILURE); 
 			}
@@ -127,12 +124,10 @@ void clean_line(char *line, char **stages, int len) {
 	}
 	/* Handle output, check everything but last */ 
 	for (i = 0; i < len-1; i++) {
-		strcpy(line_copy, stages[i]); 
-		
 		/* Stages that pipe out cannot have a file redirection out */ 
-		if ((temp = strchr(line_copy, '>')) != NULL) {
+		if ((temp = strchr(stages[i], '>')) != NULL) {
 			fprintf(stderr, "ambigious output\n"); 
 			exit(EXIT_FAILURE);
 		}
-	}	
+	}
 }	
