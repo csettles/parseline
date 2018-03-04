@@ -132,7 +132,8 @@ int handle_args(char *input, int stageno, int stage_max, int arg_count) {
 
 	arg_counter = 0;
         while(token != NULL) {
-                if (dir_flag == 0 &&(strcmp(token,"<") != 0) && (strcmp(token, ">") != 0)) {
+                if (dir_flag == 0 &&(strcmp(token,"<") != 0) 
+			&& (strcmp(token, ">") != 0)) {
                         if (arg_counter < arg_count-1) {
 				printf("\"%s\",", token);
 				arg_counter++; 
