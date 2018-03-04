@@ -48,15 +48,20 @@ int handle_output(char *input, int stageno, int stage_max) {
 
 	/* Checking end of pipeline */
 	if (stageno == stage_max) {
-		/* Find the redirection, if not, stdout */
+		/* Find the redirection */
 		redir_pos = strchr(input, '>');
 		/* Couldn't find redirection */ 
 		if (redir_pos == NULL) {
 			printf("output: original stdout\n"); 
 		/* Redirection found */ 
 		} else {
-			output = strtok(redir_pos, " "); 
-			output = strtok(NULL, " ");
+			/* Moves to space, then moves to word */ 
+			output = strtok(redir_pos, " ");
+			output = strtok(NULL, " ");  
+			/* if extra white space, moves past */
+			while(*output == ' ') {
+				output = strtok(NULL, " ");
+			}
 			printf("output: %s\n", output);
 		}
 	/* Interior of pipeline now have to consider next pipe */ 
@@ -68,9 +73,14 @@ int handle_output(char *input, int stageno, int stage_max) {
                         printf("output: pipe to stage %d\n", stageno+1);
                 /* Redirection found */
                 } else {
+			/* moves to space, then to word */
 			output = strtok(redir_pos, " ");
 			output = strtok(NULL, " "); 
-                        printf("output: %s\n", output);
+			/* if extra white space, moves past */ 
+			while(*output == ' ') {
+				output = strtok(NULL, " "); 
+                        }
+			printf("output: %s\n", output);
                 }	
 	}
 	return 0;
@@ -80,4 +90,5 @@ int handle_output(char *input, int stageno, int stage_max) {
 int handle_args(char *input, int stageno, int stage_max) {
         return 0;
 }
+
 

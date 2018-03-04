@@ -18,7 +18,7 @@ int main(int argc, const char * argv[]) {
 
         str_len = (int)strlen(line);
         if (str_len > LINE_MAX) {
-                fprintf(stderr, "parseline: command line length too long\n");
+                fprintf(stderr, "command too long\n");
 		exit(EXIT_FAILURE);
         } 
 
@@ -54,3 +54,7 @@ int split_line(char *line, char **stages) {
     }
     return len;
 }
+
+int clean_line(char *line) {
+	return 0;
+}	
