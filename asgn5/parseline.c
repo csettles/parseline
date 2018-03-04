@@ -38,12 +38,10 @@ int main(int argc, const char * argv[]) {
 
 int split_line(char *line, char **stages) {
     char *token;
-    char line_copy[LINE_MAX]; 
     int len = 1; /* any input is automatically a stage */
    
     /* Need strcpy to not ruin input string */  
-    strcpy(line_copy, line); 
-    token = strtok(line_copy, "|");
+    token = strtok(line, "|");
     
     while (token != NULL && len < STAGE_MAX) {
 	*stages = token;
