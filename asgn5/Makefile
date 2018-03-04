@@ -1,4 +1,4 @@
 CFLAGS = -Wall -pedantic -g
 
-parseline : parseline.c
+parseline : parseline.c checker.c 
 	gcc $(CFLAGS) -o parseline $^

@@ -1,16 +1,28 @@
 #include "checker.h"
+#include "parseline.h"
 
 /* Will take in the array of arguments and do stuff with it */
 
 /** Will take in an input string **/
 int handle_line(char *input, int stageno) {
-	char *rest;
-	rest = strtok(input, " ");
+	unsigned char last_index;
+
+	/* removes leading white space */ 
+	while(isspace((unsigned char) *input)) {
+		input++; 
+	}
+
+	/* removes trailing white space from fgets */
+	last_index = strlen(input) - 1;
+	if (*input && (input[last_index] == '\n')) {
+		input[last_index] = '\0'; 
+	}
 	/* input is now the command */
 	
-        handle_input(rest, stageno);
-        handle_output(rest, stageno);
-        handle_args(rest, stageno);
+	printf("%s\n", input); 
+        handle_input(input, stageno);
+        handle_output(input, stageno);
+        handle_args(input, stageno);
         return 0;
 }
 
@@ -28,7 +40,7 @@ int handle_output(char *input, int stageno) {
 }
 
 /** Will get the arg list and size**/
-int handle_args(char **arguments, char *input, int stageno) {
+int handle_args(char *input, int stageno) {
         return 0;
 }
 
