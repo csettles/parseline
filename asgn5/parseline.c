@@ -27,7 +27,7 @@ int main(int argc, const char * argv[]) {
 	/* 1 indexed, so need to do len -1 */ 	
 	for (i = 0; i < len-1; ++i) {
 		/* process stage */;
-		handle_line(stages[i], i); 	
+		handle_stage(stages[i], i); 	
 	}
 	
 

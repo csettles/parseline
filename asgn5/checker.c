@@ -4,7 +4,7 @@
 /* Will take in the array of arguments and do stuff with it */
 
 /** Will take in an input string **/
-int handle_line(char *input, int stageno) {
+int handle_stage(char *input, int stageno) {
 	unsigned char last_index;
 
 	/* removes leading white space */ 
@@ -16,10 +16,18 @@ int handle_line(char *input, int stageno) {
 	last_index = strlen(input) - 1;
 	if (*input && (input[last_index] == '\n')) {
 		input[last_index] = '\0'; 
+		last_index--; 
+	}
+	
+	while(isspace((unsigned char) input[last_index])) {
+		input[last_index] = '\0';
+		last_index--; 
 	}
 	/* input is now the command */
 	
-	printf("%s\n", input); 
+	printf("\n--------\n");
+	printf("Stage %d: \"%s\"\n", stageno, input); 
+	printf("--------\n");
         handle_input(input, stageno);
         handle_output(input, stageno);
         handle_args(input, stageno);
