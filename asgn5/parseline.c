@@ -25,7 +25,7 @@ int main(int argc, const char * argv[]) {
 	/* checks for any errors, will exit if any found */ 
 	len = split_line(line, stages);
 	clean_line(line, stages, len-1); 
-	
+
 	/* 1 indexed, so need to do len -1 */ 	
 	for (i = 0; i < len-1; ++i) {
 		/* process stage */;
