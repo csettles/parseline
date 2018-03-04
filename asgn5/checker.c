@@ -64,9 +64,10 @@ int handle_output(char *input, int stageno, int stage_max) {
 			}
 			printf("output: %s\n", output);
 		}
+	/* TODO: I don't think we need to worry about redirections here */ 
 	/* Interior of pipeline now have to consider next pipe */ 
 	} else {
-		/* Find the redirection, if not, stdout */
+		/* Find the redirection, if not, pipe */
                 redir_pos = strchr(input, '>');
                 /* Couldn't find redirection */
                 if (redir_pos == NULL) {

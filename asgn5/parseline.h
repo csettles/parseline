@@ -19,5 +19,5 @@
 #define ARG_MAX 10
 
 int split_line(char *line, char **stages);
-
+void clean_line(char *line, char **stages, int len);
 #endif /* parseline_h */

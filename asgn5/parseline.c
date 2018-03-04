@@ -22,7 +22,9 @@ int main(int argc, const char * argv[]) {
 		exit(EXIT_FAILURE);
         } 
 
+	/* checks for any errors, will exit if any found */ 
 	len = split_line(line, stages);
+	clean_line(line, stages, len-1); 
 	
 	/* 1 indexed, so need to do len -1 */ 	
 	for (i = 0; i < len-1; ++i) {
@@ -36,9 +38,12 @@ int main(int argc, const char * argv[]) {
 
 int split_line(char *line, char **stages) {
     char *token;
+    char line_copy[LINE_MAX]; 
     int len = 1; /* any input is automatically a stage */
-    
-    token = strtok(line, "|");
+   
+    /* Need strcpy to not ruin input string */  
+    strcpy(line_copy, line); 
+    token = strtok(line_copy, "|");
     
     while (token != NULL && len < STAGE_MAX) {
 	*stages = token;
@@ -55,6 +60,79 @@ int split_line(char *line, char **stages) {
     return len;
 }
 
-int clean_line(char *line) {
-	return 0;
+void clean_line(char *line, char **stages, int len) {
+	int i; 
+	char line_copy[LINE_MAX]; 
+	char *temp;
+
+	/* Checks there are no empty stages */
+	strcpy(line_copy, line);  
+	temp = strtok(line_copy, "|");
+	
+	/* TODO: Check that last pipe has a stage after it? */ 
+	while(temp != NULL) {
+		if (strlen(temp) == 1) {
+			fprintf(stderr, "invalid null command\n"); 
+			exit(EXIT_FAILURE);
+		}
+		/* Handle excess white spae? */ 
+		temp = strtok(NULL, "|");
+	}
+
+	 /* TODO: Handle missing names and get command failed on */
+	/* Checks there aren't more than one '<' or '>' in any stages*/
+	for (i = 0; i < len; i++) {
+		strcpy(line_copy, stages[i]); 
+		
+		/* Find first <, more past it, check if another exist */ 
+		temp = strchr(line_copy, '<'); 
+		if (temp != NULL) {
+			temp++; 
+			temp = strchr(temp, '<');
+			if (temp != NULL) {
+				/* Need to get command it failed on */
+				fprintf(stderr, "bad input redirection\n");
+				exit(EXIT_FAILURE); 
+			}
+		}
+	}
+	
+	for (i = 0; i < len; i++) {	
+		strcpy(line_copy, stages[i]); 
+
+		temp = strchr(line_copy, '>');
+		if (temp != NULL) {
+			temp++; 
+			temp = strchr(temp, '>');
+			if (temp != NULL) {
+				/* Need to get command failed on */ 
+				fprintf(stderr, "bad output redirection\n"); 
+				exit(EXIT_FAILURE);
+			}
+		}
+	}
+
+	/* Handle check for both a redirect and pipe */ 
+	/* Handle input, check everything after first */
+	if (len > 1) {
+		for (i = 1; i < len; i++) {
+			strcpy(line_copy, stages[i]); 
+			
+			/* Stages after 1 MUST have a pipe in, if also <, exit */
+			if ((temp = strchr(line_copy, '<')) != NULL) {
+				fprintf(stderr, "ambigious input\n");
+				exit(EXIT_FAILURE); 
+			}
+		}	
+	}
+	/* Handle output, check everything but last */ 
+	for (i = 0; i < len-1; i++) {
+		strcpy(line_copy, stages[i]); 
+		
+		/* Stages that pipe out cannot have a file redirection out */ 
+		if ((temp = strchr(line_copy, '>')) != NULL) {
+			fprintf(stderr, "ambigious output\n"); 
+			exit(EXIT_FAILURE);
+		}
+	}	
 }	
