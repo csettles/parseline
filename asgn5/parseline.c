@@ -27,12 +27,6 @@ int main(int argc, const char * argv[]) {
 	stage s = build_stages((char **)stages, len);
 	
 	/* checks for any errors, will exit if any found */
-//
-//	for (i = 0; i < len; ++i) {
-//		/* process stage */;
-//		handle_stage(stages[i], i, len);
-//	}
-	
 	
 	return 0;
 }
