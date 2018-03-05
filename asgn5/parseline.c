@@ -12,6 +12,7 @@
 int main(int argc, const char * argv[]) {
 	char line[LINE_MAX + 2];
 	int str_len;
+	stage s;
 	
 	printf("line: ");
 	fgets(line, LINE_MAX + 2, stdin);
@@ -22,7 +23,7 @@ int main(int argc, const char * argv[]) {
 		exit(EXIT_FAILURE);
 	}
 	
-	stage s = build_stages(line);
+	s = build_stages(line);
 	
 	/* checks for any errors, will exit if any found */
 	
