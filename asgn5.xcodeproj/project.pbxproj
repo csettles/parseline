@@ -31,6 +31,7 @@
 		84C4E60C204B5AEF008D7191 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		84C4E60D204B5AEF008D7191 /* checker.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = checker.c; sourceTree = "<group>"; };
 		84C4E60E204B5AEF008D7191 /* checker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = checker.h; sourceTree = "<group>"; };
+		84C4E611204DE4B4008D7191 /* README */ = {isa = PBXFileReference; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +64,7 @@
 		84C4E603204B448A008D7191 /* asgn5 */ = {
 			isa = PBXGroup;
 			children = (
+				84C4E611204DE4B4008D7191 /* README */,
 				84C4E60D204B5AEF008D7191 /* checker.c */,
 				84C4E60E204B5AEF008D7191 /* checker.h */,
 				84C4E60C204B5AEF008D7191 /* Makefile */,

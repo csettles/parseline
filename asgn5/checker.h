@@ -4,14 +4,15 @@
 #define STAGE_MAX 10
 #define LINE_MAX 512
 #define ARG_MAX 10
-#define CMD_MAX 20
+#define CMD_LEN 20
+#define FILE_LEN 20
 #define ARG_LEN 20
 
 typedef struct stage stage;
 struct stage {
 	int num, argc;
-	char input[CMD_MAX], output[CMD_MAX];
-	char command[CMD_MAX];
+	char input[FILE_LEN], output[FILE_LEN];
+	char command[CMD_LEN];
 	char line[LINE_MAX];
 	char args[ARG_MAX][ARG_LEN]; /* list of null terminated arguments */
 	stage *next;

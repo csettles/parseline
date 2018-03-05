@@ -1,0 +1,13 @@
+Caitlin Settles (csettles) and Donald Loveland (dlovelan)
+
+LIMITS:
+	line: maximum of 512 characters
+	stages: maximum of 10
+	command name: maximum of 20 characters
+	args: maximum of 10
+	arg name: maximum of 20 characters
+	file name: maximum of 20 characters
+
+We did not use malloc() in our main code except for creating new struct pointers
+to stages, which will be used in mush (asgn6) to encapusulate the functionality
+of parseline.
