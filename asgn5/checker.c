@@ -29,8 +29,8 @@ int handle_stage(char *input, int stageno, int stage_max) {
 	
         handle_input(input, stageno, stage_max);
         handle_output(input, stageno, stage_max);
-        handle_count(input, stageno, stage_max);
-	handle_args(input, stageno, stage_max);
+        arg_count = handle_count(input, stageno, stage_max);
+	handle_args(input, stageno, stage_max, arg_count);
         return 0;
 }
 
@@ -122,7 +122,7 @@ int handle_count( char *input, int stageno, int stage_max) {
 	}
 	printf("%*s", 12, "argc: ");
         printf("%d\n", arg_counter);
-	return 0;
+	return arg_counter;
 }
 	
 /** Will get the arg list and size**/

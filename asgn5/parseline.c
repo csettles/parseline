@@ -22,6 +22,11 @@ int main(int argc, const char * argv[]) {
 		exit(EXIT_FAILURE);
         } 
 
+	if (str_len == 0 || (all_space(line) != 0)) {
+		fprintf(stderr, "no command\n");
+		exit(EXIT_FAILURE);	
+	}
+	
 	/* checks for any errors, will exit if any found */ 
 	len = split_line(line, stages);
 	clean_line(line, stages, len);
@@ -40,7 +45,6 @@ int split_line(char *line, char **stages) {
     char *token;
     int len = 0; /* any input is automatically a stage */
    
-    /* Need strcpy to not ruin input string */  
     token = strtok(line, "|");
     
     while (token != NULL && len < STAGE_MAX) {
@@ -63,14 +67,14 @@ void clean_line(char *line, char **stages, int len) {
 	char line_copy[LINE_MAX]; 
 	char *temp;
 
+	/* TODO: This isn't actually working */ 
 	/* Checks there are no empty stages */
-	
-	strcpy(line_copy, line);  
+		
+	memcpy(line_copy, line, strlen(line) + 1);  
 	temp = strtok(line_copy, "|");
 	
-	/* TODO: If multiple spaces between things?? */ 
 	while(temp != NULL) {
-		if (strlen(temp) == 1) {
+		if (all_space(temp) != 0) {
 			fprintf(stderr, "invalid null command\n"); 
 			exit(EXIT_FAILURE);
 		}
@@ -111,7 +115,7 @@ void clean_line(char *line, char **stages, int len) {
 	/* Handle input, check everything after first */
 	if (len > 1) {
 		for (i = 1; i < len; i++) {
-			/* Stages after 1 MUST have a pipe in, if also <, exit */
+			/* Stages after 1 have a pipe in, if also <, exit */
 			if ((temp = strchr(stages[i], '<')) != NULL) {
 				fprintf(stderr, "ambigious input\n");
 				exit(EXIT_FAILURE); 
@@ -127,3 +131,18 @@ void clean_line(char *line, char **stages, int len) {
 		}
 	}
 }	
+
+int all_space(char *line) {
+	char temp[LINE_MAX];
+	int i;
+
+	i = 0;	
+	strcpy(temp, line); 
+	while(temp[i] != '\0') {
+		if (!(isspace((unsigned char)temp[i]))) {
+			return 0; 
+		} 
+		i++; 
+	}
+	return 1; 
+}
