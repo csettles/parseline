@@ -59,7 +59,7 @@ int handle_input(stage *s, char *input, int stage_max) {
 		redir_pos = strchr(position_temp, '<');
 		/* Couldn't find redirection */
 		if (redir_pos == NULL) {
-			strncpy(s->input, "original stdin", FILE_LEN); /* no redirection */
+			strncpy(s->input, "original stdin", FILE_LEN);
 		} else {
 			/* Moves to space, then moves to word */
 			input_dest = strtok(redir_pos, " ");
@@ -68,7 +68,7 @@ int handle_input(stage *s, char *input, int stage_max) {
 			while(*input_dest == ' ') {
 				input_dest = strtok(NULL, " ");
 			}
-			strncpy(s->input, input_dest, FILE_LEN); /* found redirection */
+			strncpy(s->input, input_dest, FILE_LEN);
 		}
 		/* Interior of pipeline now only have to consider next pipe */
 	} else {
@@ -99,7 +99,7 @@ int handle_output(stage *s, char *input, int stage_max) {
 			while(*output == ' ') {
 				output = strtok(NULL, " ");
 			}
-			strncpy(s->output, output, FILE_LEN); /* found redirection */
+			strncpy(s->output, output, FILE_LEN);
 		}
 		/* Interior of pipeline now only have to consider next pipe */
 	} else {
