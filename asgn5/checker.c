@@ -5,7 +5,7 @@
 
 stage *new_stage(int number) {
 	stage *s;
-	s = malloc(sizeof(struct stage))
+	s = malloc(sizeof(struct stage));
 	s->next = NULL;
 	s->num = number;
 	s->argc = 0;
