@@ -13,6 +13,14 @@ stage *new_stage(int number) {
 	return s;
 }
 
+stage new_stage_s(int number) {
+	stage s;
+	s.num = number;
+	s.argc = 0;
+	s.next = NULL;
+	return s;
+}
+
 /** Will take in an input string **/
 int handle_stage(stage *s, char *input, int stage_max) {
 	int last_index;
@@ -22,13 +30,15 @@ int handle_stage(stage *s, char *input, int stage_max) {
 		input[last_index] = '\0';
 		last_index--;
 	}
-	
+
 	if (last_index + 1 == 0 || all_space(input)) {
 		fprintf(stderr, "invalid null command\n");
 		exit(EXIT_FAILURE);
 	}
 	
 	/* input is now the command */
+	
+	strcpy(s->line, input);
 	
 	handle_input(s, input, stage_max);
 	handle_output(s, input, stage_max);
@@ -80,7 +90,7 @@ int handle_output(stage *s, char *input, int stage_max) {
 		redir_pos = strchr(position_temp, '>');
 		/* Couldn't find redirection */
 		if (redir_pos == NULL) {
-			strcpy(s->input, "original stdout");
+			strcpy(s->output, "original stdout");
 		} else {
 			/* Moves to space, then moves to word */
 			output = strtok(redir_pos, " ");
@@ -89,11 +99,11 @@ int handle_output(stage *s, char *input, int stage_max) {
 			while(*output == ' ') {
 				output = strtok(NULL, " ");
 			}
-			strcpy(s->input, output); /* found redirection */
+			strcpy(s->output, output); /* found redirection */
 		}
 		/* Interior of pipeline now only have to consider next pipe */
 	} else {
-		sprintf(s->input, "pipe to stage %d", s->num + 1);
+		sprintf(s->output, "pipe to stage %d", s->num + 1);
 	}
 	return 0;
 }
@@ -123,19 +133,20 @@ int handle_count(stage *s, char *input, int stage_max) {
 /** Will get the arg list and size**/
 int handle_args(stage *s, char *input, int stage_max) {
 	char input_copy[LINE_MAX];
-	char *token, *args[ARG_MAX];
-	int len = 0, i;
+	char *token;
+	int len = 0;
 	
 	strcpy(input_copy, input);
 	
 	token = strtok(input_copy, " ");
+	strcpy(s->command, token);
 	while (token != NULL && len < ARG_MAX) {
 		if ((strcmp(token,"<") == 0) || (strcmp(token, ">") == 0)) {
 			token = strtok(NULL, " "); /* skip file name */
 			token = strtok(NULL, " "); /* go to next arg */
 			continue;
 		}
-		args[len] = token;
+		strncpy(s->args[len], token, ARG_LEN);
 		len++;
 		token = strtok(NULL, " ");
 	}
@@ -145,21 +156,24 @@ int handle_args(stage *s, char *input, int stage_max) {
 		exit(EXIT_FAILURE);
 	}
 	
-	for (i = 0; i < len; i++) {
-		s->args[i] = args[i];
-	}
-	
 	return 0;
 }
 
-stage build_stages(char **stages, int len) {
-	int i;
+stage build_stages(char *line) {
+	int i, len;
+	char stages[STAGE_MAX][LINE_MAX];
 	stage *s, *temp;
 	
-	temp = s = new_stage(0);
-	for (i = 0; i < len; i++) {
-		handle_stage(temp, stages[i], len);
-		temp->next = new_stage(i + 1);
+	len = split_line(line, stages);
+	clean_line(line, stages, len);
+	
+	s = new_stage(0);
+	handle_stage(s, stages[0], len - 1);
+	
+	temp = s;
+	for (i = 1; i < len; i++) {
+		temp->next = new_stage(i);
+		handle_stage(temp->next, stages[i], len - 1);
 		temp = temp->next;
 	}
 	
@@ -170,7 +184,7 @@ void print_stage(stage s) {
 	int i;
 	
 	printf("\n--------\n");
-	printf("Stage %d: \"%s\"\n", s.num, s.command);
+	printf("Stage %d: \"%s\"\n", s.num, s.line);
 	printf("--------\n");
 	
 	printf("%12s", "input: ");

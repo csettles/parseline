@@ -10,8 +10,8 @@
 #include "parseline.h"
 
 int main(int argc, const char * argv[]) {
-	char *stages[STAGE_MAX], line[LINE_MAX + 2];
-	int i, len = 0, str_len;
+	char line[LINE_MAX + 2];
+	int str_len;
 	
 	printf("line: ");
 	fgets(line, LINE_MAX + 2, stdin);
@@ -22,38 +22,38 @@ int main(int argc, const char * argv[]) {
 		exit(EXIT_FAILURE);
 	}
 	
-	len = split_line(line, (char **)stages);
-	clean_line(line, (char **)stages, len);
-	stage s = build_stages((char **)stages, len);
+	stage s = build_stages(line);
 	
 	/* checks for any errors, will exit if any found */
+	
+	print_stages(s);
 	
 	return 0;
 }
 
-int split_line(char *line, char **stages) {
+int split_line(char *line, char stages[STAGE_MAX][LINE_MAX]) {
 	char *token, line_copy[LINE_MAX];
-	int len = 0; /* any input is automatically a stage */
+	int len = 0;
 	
 	strcpy(line_copy, line);
 	token = strtok(line_copy, "|");
 	
 	while (token != NULL && len < STAGE_MAX) {
-		*stages = token;
+		strncpy(stages[len], token, LINE_MAX);
 		token = strtok(NULL, "|");
-		stages++, len++;
+		len++;
 	}
-	*stages = NULL;
 	
 	if (token != NULL) {
 		/* token would be NULL if */
 		fprintf(stderr, "pipeline too deep\n");
 		exit(EXIT_FAILURE);
 	}
+	
 	return len;
 }
 
-void clean_line(char *line, char **stages, int len) {
+void clean_line(char *line, char stages[STAGE_MAX][LINE_MAX], int len) {
 	int i;
 	char line_copy[LINE_MAX];
 	char *temp;
