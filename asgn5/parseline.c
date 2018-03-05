@@ -24,12 +24,12 @@ int main(int argc, const char * argv[]) {
 
 	/* checks for any errors, will exit if any found */ 
 	len = split_line(line, stages);
-	clean_line(line, stages, len-1); 
+	clean_line(line, stages, len);
 
 	/* 1 indexed, so need to do len -1 */ 	
-	for (i = 0; i < len-1; ++i) {
+	for (i = 0; i < len; ++i) {
 		/* process stage */;
-		handle_stage(stages[i], i, len-2); 	
+		handle_stage(stages[i], i, len-1); 	
 	}
 	
 
@@ -38,7 +38,7 @@ int main(int argc, const char * argv[]) {
 
 int split_line(char *line, char **stages) {
     char *token;
-    int len = 1; /* any input is automatically a stage */
+    int len = 0; /* any input is automatically a stage */
    
     /* Need strcpy to not ruin input string */  
     token = strtok(line, "|");
@@ -78,11 +78,11 @@ void clean_line(char *line, char **stages, int len) {
 		temp = strtok(NULL, "|");
 	}
 
-	 /* TODO: Handle missing names and get command failed on */
+	/* TODO: Handle missing names and get command failed on */
 	/* Checks there aren't more than one '<' or '>' in any stages*/
 	for (i = 0; i < len; i++) {
 		
-		/* Find first <, move past it, check if another exist */ 
+		/* check input */
 		temp = strchr(stages[i], '<'); 
 		if (temp != NULL) {
 			temp++; 
@@ -93,17 +93,15 @@ void clean_line(char *line, char **stages, int len) {
 				exit(EXIT_FAILURE); 
 			}
 		}
-	}
-
-	for (i = 0; i < len; i++) {	
-		/* Find first >, move past, check if another exists */
+		
+		/* check output */
 		temp = strchr(stages[i], '>');
 		if (temp != NULL) {
-			temp++; 
+			temp++;
 			temp = strchr(temp, '>');
 			if (temp != NULL) {
-				/* Need to get command failed on */ 
-				fprintf(stderr, "bad output redirection\n"); 
+				/* Need to get command failed on */
+				fprintf(stderr, "bad output redirection\n");
 				exit(EXIT_FAILURE);
 			}
 		}
