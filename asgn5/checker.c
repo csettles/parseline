@@ -3,17 +3,19 @@
 
 /* Will take in the array of arguments and do stuff with it */
 
-stage new_stage(int number) {
+stage *new_stage(int number) {
 	stage s;
-	s.next = NULL;
-	s.num = number;
+	s = malloc(sizeof(struct stage))
+	s->next = NULL;
+	s->num = number;
+	s->argc = 0;
 
 	return s;
 }
 
 /** Will take in an input string **/
-int handle_stage(char *input, int stageno, int stage_max) {
-	int arg_count, last_index;
+int handle_stage(stage *s, char *input, int stage_max) {
+	int last_index;
 	
 	last_index = (int)strlen(input) - 1;
 	if (input[last_index] == '\n') {
@@ -21,33 +23,33 @@ int handle_stage(char *input, int stageno, int stage_max) {
 		last_index--;
 	}
 	
-	printf("\n--------\n");
-	printf("Stage %d: \"%s\"\n", stageno, input);
-	printf("--------\n");
+	if (last_index + 1 == 0 || all_space(input)) {
+		fprintf(stderr, "invalid null command\n");
+		exit(EXIT_FAILURE);
+	}
 	
 	/* input is now the command */
 	
-	handle_input(input, stageno, stage_max);
-	handle_output(input, stageno, stage_max);
-	handle_count(input, stageno, stage_max);
-	handle_args(input, stageno, stage_max);
+	handle_input(s, input, stage_max);
+	handle_output(s, input, stage_max);
+	handle_count(s, input, stage_max);
+	handle_args(s, input, stage_max);
 	return 0;
 }
 
 /** Will determine where the input is coming from **/
-int handle_input(char *input, int stageno, int stage_max) {
+int handle_input(stage *s, char *input, int stage_max) {
 	char *redir_pos, *input_dest;
 	char position_temp[LINE_MAX];
 	
 	strcpy(position_temp, input);
 	
-	if (stageno == 0) {
+	if (s->num == 0) {
 		/* Find the redirection */
 		redir_pos = strchr(position_temp, '<');
 		/* Couldn't find redirection */
 		if (redir_pos == NULL) {
-			printf("%*s", 12, "input: ");
-			printf("original stdin\n");
+			strcpy(s->input, "original stdin"); /* no redirection */
 		} else {
 			/* Moves to space, then moves to word */
 			input_dest = strtok(redir_pos, " ");
@@ -56,33 +58,29 @@ int handle_input(char *input, int stageno, int stage_max) {
 			while(*input_dest == ' ') {
 				input_dest = strtok(NULL, " ");
 			}
-			printf("%*s", 12, "input: ");
-			printf("%s\n", input_dest);
+			strcpy(s->input, input_dest); /* found redirection */
 		}
 		/* Interior of pipeline now only have to consider next pipe */
 	} else {
-		printf("%*s", 12, "input: ");
-		printf("pipe from stage %d\n", stageno-1);
+		sprintf(s->input, "pipe from stage %d", s->num - 1);
 	}
 	return 0;
 }
 
 /** Will determine where the output should be **/
-int handle_output(char *input, int stageno, int stage_max) {
+int handle_output(stage *s, char *input, int stage_max) {
 	char *redir_pos, *output;
 	char position_temp[LINE_MAX];
 	
 	strcpy(position_temp, input);
 	
 	/* if last stage or if only one stage */
-	if (stageno == stage_max) {
+	if (s->num == stage_max) {
 		/* Find the redirection */
 		redir_pos = strchr(position_temp, '>');
 		/* Couldn't find redirection */
 		if (redir_pos == NULL) {
-			printf("%*s", 12, "output: ");
-			printf("original stdout\n");
-			/* Redirection found */
+			strcpy(s->input, "original stdout");
 		} else {
 			/* Moves to space, then moves to word */
 			output = strtok(redir_pos, " ");
@@ -91,18 +89,16 @@ int handle_output(char *input, int stageno, int stage_max) {
 			while(*output == ' ') {
 				output = strtok(NULL, " ");
 			}
-			printf("%*s", 12, "output: ");
-			printf("%s\n", output);
+			strcpy(s->input, output); /* found redirection */
 		}
 		/* Interior of pipeline now only have to consider next pipe */
 	} else {
-		printf("%*s", 12, "output: ");
-		printf("pipe to stage %d\n", stageno+1);
+		sprintf(s->input, "pipe to stage %d", s->num + 1);
 	}
 	return 0;
 }
 
-int handle_count( char *input, int stageno, int stage_max) {
+int handle_count(stage *s, char *input, int stage_max) {
 	char input_copy[LINE_MAX];
 	char *token;
 	int arg_counter;
@@ -120,15 +116,14 @@ int handle_count( char *input, int stageno, int stage_max) {
 		}
 		token = strtok(NULL, " ");
 	}
-	printf("%*s", 12, "argc: ");
-	printf("%d\n", arg_counter);
-	return arg_counter;
+	s->argc = arg_counter;
+	return 0;
 }
 
 /** Will get the arg list and size**/
-int handle_args(char *input, int stageno, int stage_max) {
+int handle_args(stage *s, char *input, int stage_max) {
 	char input_copy[LINE_MAX];
-	char *token, *args[ARG_MAX + 1];
+	char *token, *args[ARG_MAX];
 	int len = 0, i;
 	
 	strcpy(input_copy, input);
@@ -144,20 +139,63 @@ int handle_args(char *input, int stageno, int stage_max) {
 		len++;
 		token = strtok(NULL, " ");
 	}
-	args[len] = NULL;
 	
 	if (len == ARG_MAX && token != NULL) {
 		fprintf(stderr, "too many arguments\n");
 		exit(EXIT_FAILURE);
 	}
 	
-	printf("%12s", "argv: ");
-	for (i = 0; i < len - 1; i++) {
-		printf("\"%s\",", args[i]);
+	for (i = 0; i < len; i++) {
+		s->args[i] = args[i];
 	}
-	printf("\"%s\"\n", args[i]);
 	
 	return 0;
+}
+
+stage build_stages(char **stages, int len) {
+	int i;
+	stage *s, *temp;
+	
+	temp = s = new_stage(0);
+	for (i = 0; i < len; i++) {
+		handle_stage(temp, stages[i], len);
+		temp->next = new_stage(i + 1);
+		temp = temp->next;
+	}
+	
+	return *s;
+}
+
+void print_stage(stage s) {
+	int i;
+	
+	printf("\n--------\n");
+	printf("Stage %d: \"%s\"\n", s.num, s.command);
+	printf("--------\n");
+	
+	printf("%12s", "input: ");
+	printf("%s\n", s.input);
+	
+	printf("%12s", "output: ");
+	printf("%s\n", s.output);
+	
+	printf("%12s", "argc: ");
+	printf("%d\n", s.argc);
+	
+	printf("%12s", "argv: ");
+	for (i = 0; i < s.argc - 1; i++) {
+		printf("\"%s\",", s.args[i]);
+	}
+	printf("\"%s\"\n", s.args[i]);
+}
+
+void print_stages(stage head) {
+	print_stage(head);
+	
+	while (head.next != NULL) {
+		print_stage(*head.next);
+		head = *head.next;
+	}
 }
 
 

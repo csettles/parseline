@@ -14,10 +14,6 @@
 #include <string.h>
 #include <ctype.h>
 
-#define STAGE_MAX 10
-#define LINE_MAX 512
-#define ARG_MAX 10
-
 int split_line(char *line, char **stages);
 void clean_line(char *line, char **stages, int len);
 int all_space(char *line); 
