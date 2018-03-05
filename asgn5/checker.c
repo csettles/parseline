@@ -4,7 +4,7 @@
 /* Will take in the array of arguments and do stuff with it */
 
 stage *new_stage(int number) {
-	stage s;
+	stage *s;
 	s = malloc(sizeof(struct stage))
 	s->next = NULL;
 	s->num = number;
