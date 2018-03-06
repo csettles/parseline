@@ -32,6 +32,14 @@ int main(int argc, const char * argv[]) {
 	return 0;
 }
 
+/**
+ Splits a line of input into "stages" based on piping. Each chunk of input
+ between a pipe is called a stage.
+
+ @param line the line of input
+ @param stages an array of char *, which will hold each stage as a string
+ @return the number of stages found in the line
+ */
 int split_line(char *line, char stages[STAGE_MAX][LINE_MAX]) {
 	char *token, line_copy[LINE_MAX];
 	int len = 0;
@@ -54,6 +62,15 @@ int split_line(char *line, char stages[STAGE_MAX][LINE_MAX]) {
 	return len;
 }
 
+/**
+ Error checks to make sure that the input does not violate certain parameters,
+ such as exceeding the maximum number of pipes or giving ambiguous inputs
+ or outputs.
+
+ @param line the line of input
+ @param stages a list of char* pointing to each stage in the input
+ @param len the number of stages in the line
+ */
 void clean_line(char *line, char stages[STAGE_MAX][LINE_MAX], int len) {
 	int i;
 	char line_copy[LINE_MAX];
@@ -122,6 +139,12 @@ void clean_line(char *line, char stages[STAGE_MAX][LINE_MAX], int len) {
 	}
 }    
 
+/**
+ Checks if a string is "empty" -- a.k.a., it contains spaces or is null.
+
+ @param line the string in question
+ @return whether it is "empty"
+ */
 int all_space(char *line) {
 	char temp[LINE_MAX];
 	int i;

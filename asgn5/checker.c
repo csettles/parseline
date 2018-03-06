@@ -3,6 +3,12 @@
 
 /* Will take in the array of arguments and do stuff with it */
 
+/**
+ Creates a new stage pointer.
+
+ @param number the stage number
+ @return the newly created stage pointer
+ */
 stage *new_stage(int number) {
 	stage *s;
 	s = malloc(sizeof(struct stage));
@@ -13,6 +19,12 @@ stage *new_stage(int number) {
 	return s;
 }
 
+/**
+ Creates a new stage struct.
+
+ @param number the stage number
+ @return the newly created stage struct
+ */
 stage new_stage_s(int number) {
 	stage s;
 	s.num = number;
@@ -21,8 +33,14 @@ stage new_stage_s(int number) {
 	return s;
 }
 
-/** Will take in an input string **/
-int handle_stage(stage *s, char *input, int stage_max) {
+/**
+ Populates a stage from a "stage" of input.
+
+ @param s the stage to populate
+ @param input the command, args, and redirections
+ @param stage_max the index of the last stage
+ */
+void handle_stage(stage *s, char *input, int stage_max) {
 	int last_index;
 	
 	last_index = (int)strlen(input) - 1;
@@ -43,11 +61,16 @@ int handle_stage(stage *s, char *input, int stage_max) {
 	handle_input(s, input, stage_max);
 	handle_output(s, input, stage_max);
 	handle_args(s, input, stage_max);
-	return 0;
 }
 
-/** Will determine where the input is coming from **/
-int handle_input(stage *s, char *input, int stage_max) {
+/**
+ Determines where the input to the stage is coming from.
+
+ @param s the stage
+ @param input the string of the command, args, and redirections
+ @param stage_max the index of the last stage
+ */
+void handle_input(stage *s, char *input, int stage_max) {
 	char *redir_pos, *input_dest;
 	char position_temp[LINE_MAX];
 	
@@ -73,11 +96,16 @@ int handle_input(stage *s, char *input, int stage_max) {
 	} else {
 		sprintf(s->input, "pipe from stage %d", s->num - 1);
 	}
-	return 0;
 }
 
-/** Will determine where the output should be **/
-int handle_output(stage *s, char *input, int stage_max) {
+/**
+ Determines where the stage will give its output.
+
+ @param s the stage
+ @param input the string of the command, args, and redirections
+ @param stage_max the index of the last stage
+ */
+void handle_output(stage *s, char *input, int stage_max) {
 	char *redir_pos, *output;
 	char position_temp[LINE_MAX];
 	
@@ -104,11 +132,17 @@ int handle_output(stage *s, char *input, int stage_max) {
 	} else {
 		sprintf(s->output, "pipe to stage %d", s->num + 1);
 	}
-	return 0;
 }
 
-/** Will get the arg list and size**/
-int handle_args(stage *s, char *input, int stage_max) {
+/**
+ Determines the command and arguments to the stage, as well as the number of
+ arguments it has.
+
+ @param s the stage
+ @param input the string of the command, arguments, and redirections
+ @param stage_max the index of the last stage
+ */
+void handle_args(stage *s, char *input, int stage_max) {
 	char input_copy[LINE_MAX];
 	char *token;
 	int len = 0;
@@ -138,9 +172,14 @@ int handle_args(stage *s, char *input, int stage_max) {
 	}
 	
 	s->argc = len;
-	return 0;
 }
 
+/**
+ Builds a linked list of stages from a line of input.
+
+ @param line a string of input
+ @return stages in the input as represented by structs
+ */
 stage build_stages(char *line) {
 	int i, len;
 	char stages[STAGE_MAX][LINE_MAX];
@@ -162,6 +201,11 @@ stage build_stages(char *line) {
 	return *s;
 }
 
+/**
+ Prints a single stage.
+
+ @param s the stage
+ */
 void print_stage(stage s) {
 	int i;
 	
@@ -185,6 +229,11 @@ void print_stage(stage s) {
 	printf("\"%s\"\n", s.args[i]);
 }
 
+/**
+ Prints a list of stages.
+
+ @param head the first stage in the list
+ */
 void print_stages(stage head) {
 	print_stage(head);
 	

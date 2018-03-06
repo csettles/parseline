@@ -18,11 +18,11 @@ struct stage {
 	stage *next;
 };
 
-int handle_stage(stage *s, char *input, int stage_max);
+void handle_stage(stage *s, char *input, int stage_max);
 
-int handle_input(stage *s, char *input, int stage_max);
-int handle_output(stage *s, char *input, int stage_max);
-int handle_args(stage *s, char *input, int stage_max);
+void handle_input(stage *s, char *input, int stage_max);
+void handle_output(stage *s, char *input, int stage_max);
+void handle_args(stage *s, char *input, int stage_max);
 
 stage *new_stage(int number);
 stage new_stage_s(int number);
