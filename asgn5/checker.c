@@ -42,7 +42,6 @@ int handle_stage(stage *s, char *input, int stage_max) {
 	
 	handle_input(s, input, stage_max);
 	handle_output(s, input, stage_max);
-	handle_count(s, input, stage_max);
 	handle_args(s, input, stage_max);
 	return 0;
 }
@@ -108,28 +107,6 @@ int handle_output(stage *s, char *input, int stage_max) {
 	return 0;
 }
 
-int handle_count(stage *s, char *input, int stage_max) {
-	char input_copy[LINE_MAX];
-	char *token;
-	int arg_counter;
-	
-	strcpy(input_copy, input);
-	
-	token = strtok(input_copy, " ");
-	
-	arg_counter = 0;
-	while(token != NULL) {
-		if ((strcmp(token,"<") != 0) && (strcmp(token, ">") != 0)) {
-			arg_counter++;
-		} else {
-			arg_counter--;
-		}
-		token = strtok(NULL, " ");
-	}
-	s->argc = arg_counter;
-	return 0;
-}
-
 /** Will get the arg list and size**/
 int handle_args(stage *s, char *input, int stage_max) {
 	char input_copy[LINE_MAX];
@@ -146,6 +123,10 @@ int handle_args(stage *s, char *input, int stage_max) {
 			token = strtok(NULL, " "); /* go to next arg */
 			continue;
 		}
+		if (strlen(token) >= ARG_LEN) {
+			fprintf(stderr, "argument name too long\n");
+			exit(EXIT_FAILURE);
+		}
 		strncpy(s->args[len], token, ARG_LEN);
 		len++;
 		token = strtok(NULL, " ");
@@ -156,6 +137,7 @@ int handle_args(stage *s, char *input, int stage_max) {
 		exit(EXIT_FAILURE);
 	}
 	
+	s->argc = len;
 	return 0;
 }
 

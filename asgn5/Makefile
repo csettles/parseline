@@ -1,4 +1,4 @@
-CFLAGS = -Wall -pedantic -g
+CFLAGS = -Wall -pedantic -O3
 
 parseline: parseline.o checker.o
 	gcc $(CFLAGS) -o parseline $^
